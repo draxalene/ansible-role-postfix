@@ -1,7 +1,7 @@
 ---
 # tasks file for hoplacloud.postfix
 
-- name: Install latest version of GIT
+- name: Install latest version of postfix
   apt:
     name: postfix
     state: latest
