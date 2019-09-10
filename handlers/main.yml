@@ -1,0 +1,4 @@
+---
+# handlers file for hoplacloud.postfix
+- name: restart postfix
+  service: name=postfix state=restarted

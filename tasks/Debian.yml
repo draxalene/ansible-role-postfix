@@ -1,0 +1,30 @@
+---
+# tasks file for hoplacloud.postfix
+
+- name: Install latest version of GIT
+  apt:
+    name: postfix
+    state: latest
+
+- name: Get public IP
+  ipify_facts:
+
+- name: This is the target public IP and the reverse DNS
+  debug:
+    msg: Reverse DNS for {{ ipify_public_ip }} is {{ lookup('dig', ipify_public_ip, 'qtype=PTR')[:-1] }}
+
+- name: Setup smtpd_banner in postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^smtpd_banner'
+    line: 'smtpd_banner = $myhostname ESMTP'
+  notify:
+    - restart postfix
+
+- name: Setup myhostname in postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^myhostname'
+    line: "myhostname = {{ lookup('dig', ipify_public_ip, 'qtype=PTR')[:-1] }}"
+  notify:
+    - restart postfix
