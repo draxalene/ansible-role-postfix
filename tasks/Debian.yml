@@ -31,6 +31,6 @@
   lineinfile:
     path: /etc/postfix/main.cf
     regexp: '^myhostname'
-    line: "myhostname = {{ lookup('dig', ipify_public_ip, 'qtype=PTR')[:-1] }}"
+    line: "myhostname = {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}"
   notify:
     - restart postfix
