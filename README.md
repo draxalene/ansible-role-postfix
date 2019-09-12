@@ -37,4 +37,4 @@ GPLv3
 Author Information
 ------------------
 
-This role was created in 2019 by [hopla.cloud](https://hopla.cloud)
+Joffrey Skandera for [hopla.cloud](https://hopla.cloud)

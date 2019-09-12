@@ -1,6 +1,6 @@
 galaxy_info:
   role_name: postfix
-  author: hoplacloud
+  author: Joffrey Skandera
   description: Hopla.cloud role for ansible to install and configure postfix
   company: hopla.cloud
 
@@ -16,7 +16,7 @@ galaxy_info:
   galaxy_tags:
     - postfix
     - email
-    
+
 dependencies:
     - hoplacloud.linux_update
     - hoplacloud.linux_motd
