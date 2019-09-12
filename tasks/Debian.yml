@@ -6,12 +6,18 @@
     name: postfix
     state: latest
 
+- name: Install python-dnspython
+  apt:
+    name: python-dnspython
+    state: latest
+
 - name: Get public IP
-  ipify_facts:
+  set_fact:
+    public_ip: "{{ ansible_all_ipv4_addresses }}"
 
 - name: This is the target public IP and the reverse DNS
   debug:
-    msg: Reverse DNS for {{ ipify_public_ip }} is {{ lookup('dig', ipify_public_ip, 'qtype=PTR')[:-1] }}
+    msg: Reverse DNS for {{ public_ip }} is {{ lookup('dig', public_ip, 'qtype=PTR')[:-1] }}
 
 - name: Setup smtpd_banner in postfix
   lineinfile:
