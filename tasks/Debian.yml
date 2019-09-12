@@ -17,7 +17,7 @@
 
 - name: This is the target public IP and the reverse DNS
   debug:
-    msg: Reverse DNS for {{ public_ip }} is {{ lookup('dig', public_ip, 'qtype=PTR')[:-1] }}
+    msg: Reverse DNS for {{ public_ip }} is {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}
 
 - name: Setup smtpd_banner in postfix
   lineinfile:
