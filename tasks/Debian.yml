@@ -11,26 +11,27 @@
     name: python-dnspython
     state: latest
 
-- name: Get public IP
-  set_fact:
-    public_ip: "{{ ansible_all_ipv4_addresses }}"
+#- name: Get public IP
+#  set_fact:
+#    public_ip: "{{ ansible_all_ipv4_addresses }}"
 
-- name: This is the target public IP and the reverse DNS
-  debug:
-    msg: Reverse DNS for {{ public_ip }} is {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}
+#- name: This is the target public IP and the reverse DNS
+#  debug:
+#    msg: Reverse DNS for {{ public_ip }} is {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}
 
 - name: Setup smtpd_banner in postfix
   lineinfile:
     path: /etc/postfix/main.cf
     regexp: '^smtpd_banner'
     line: 'smtpd_banner = $myhostname ESMTP'
-  notify:
-    - restart postfix
+
 
 - name: Setup myhostname in postfix
   lineinfile:
     path: /etc/postfix/main.cf
     regexp: '^myhostname'
-    line: "myhostname = {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}"
-  notify:
-    - restart postfix
+#    line: "myhostname = {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}"
+    line: "myhostname = wordpress.local"
+
+- name: Restart postfix
+  service: name=postfix state=restarted
