@@ -3,10 +3,13 @@ Role Name
 
 Hopla.cloud role for ansible to install and configure postfix.
 
+Install and configure a postfix server with reverse dns. The server can send mail from localhost only.
+
+
 Requirements
 ------------
 
-None.
+Linux server Ubuntu 18.04
 
 Role Variables
 --------------
