@@ -29,7 +29,7 @@
   lineinfile:
     path: /etc/postfix/main.cf
     regexp: '^myhostname'
-    line: "myhostname = {{ lookup('dig', public_ip | join, 'qtype=PTR')[:-1] }}"
+    line: "myhostname = {{ lookup('dig', ipify_public_ip | join, 'qtype=PTR')[:-1] }}"
 
 - name: Restart postfix
   service: name=postfix state=restarted
