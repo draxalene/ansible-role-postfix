@@ -1,4 +1,4 @@
-Role Name
+hoplacloud.postfix
 =========
 
 Hopla.cloud role for ansible to install and configure postfix.
