@@ -31,5 +31,11 @@
     regexp: '^myhostname'
     line: "myhostname = {{ lookup('dig', ipify_public_ip | join, 'qtype=PTR')[:-1] }}"
 
+- name: Setup inet_protocols to IPV4
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^inet_protocols'
+    line: "inet_protocols = ipv4"
+
 - name: Restart postfix
   service: name=postfix state=restarted
