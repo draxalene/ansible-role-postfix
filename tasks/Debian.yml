@@ -6,9 +6,9 @@
     name: postfix
     state: latest
 
-- name: Install python-dnspython
+- name: Install python3-dnspython
   apt:
-    name: python-dnspython
+    name: python3-dnspython
     state: latest
 
 - name: Get public IP

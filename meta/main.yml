@@ -17,6 +17,4 @@ galaxy_info:
     - postfix
     - email
 
-dependencies:
-    - hoplacloud.linux_update
-    - hoplacloud.linux_motd
+dependencies: []
