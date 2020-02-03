@@ -24,6 +24,16 @@
     regexp: '^smtpd_banner'
     line: 'smtpd_banner = $myhostname ESMTP'
 
+- name: Setup aliases
+  lineinfile:
+    path: /etc/aliases
+    insertafter: "^postmaster"
+    line: "{{ username }}: {{ user_email }}"
+    register: new_alias
+
+- name: rum newaliases command
+  command: newaliases
+  when: new_alias is changed
 
 - name: Setup myhostname in postfix
   lineinfile:
