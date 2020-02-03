@@ -13,6 +13,7 @@
 
 - name: Get public IP
   ipify_facts:
+    timeout: 30
 
 - name: This is the target public IP and the reverse DNS
   debug:
