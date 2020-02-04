@@ -6,13 +6,17 @@ galaxy_info:
 
   license: GPLv3
 
-  min_ansible_version: 2.5
+  min_ansible_version: 2.8
 
   platforms:
     - name: Ubuntu
       versions:
         - bionic
         - xenial
+    - name: EL
+      versions:
+        - 7
+
   galaxy_tags:
     - postfix
     - email
