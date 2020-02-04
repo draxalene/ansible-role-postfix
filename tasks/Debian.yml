@@ -29,7 +29,7 @@
   lineinfile:
     path: /etc/aliases
     insertafter: "^postmaster"
-    line: "{{ username }}: {{ user_email }}"
+    line: "{{ user_name }}: {{ user_email }}"
   register: new_alias
 
 - name: rum newaliases command
