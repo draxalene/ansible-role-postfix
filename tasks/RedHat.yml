@@ -1,2 +1,68 @@
 ---
 # tasks file for hoplacloud.postfix
+
+- name: Install latest version of postfix
+  yum:
+    name: postfix
+
+- name: Install python3-dnspython
+  yum:
+    name: python3-dnspython
+
+- name: Install bind-utils
+  yum:
+    name: bind-utils
+
+- name: Get public_ipv4
+  command: dig TXT +short o-o.myaddr.l.google.com @ns1.google.com -4
+  register: public_ipv4
+
+- name: This is the target public IP
+  debug:
+     msg: "Public IP v4 is : {{ public_ipv4.stdout | regex_replace('\"', '')}}"
+
+- name: Get PTR v4
+  command: dig +short -x "{{ public_ipv4.stdout | regex_replace('\"', '') }}"
+  register: ptr_ipv4
+
+- name: This is the target reverse DNS
+  debug:
+     msg: "Reverse DNS is {{ ptr_ipv4.stdout }}"
+
+- set_fact:
+  public_ipv4: "{{ public_ipv4.stdout | regex_replace('\"', '') }}"
+  ptr_v4: "{{ ptr_ipv4.stdout }}"
+
+- name: Setup smtpd_banner in postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^smtpd_banner'
+    line: 'smtpd_banner = $myhostname ESMTP'
+
+- name: Setup aliases
+  lineinfile:
+    path: /etc/aliases
+    insertafter: "^postmaster"
+    line: "{{ user_name }}: {{ user_email }}"
+  register: new_alias
+
+- name: rum newaliases command
+  command: newaliases
+  when: new_alias is changed
+
+- name: Setup myhostname in postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^myhostname'
+    line: "myhostname = {{ ptr_v4 }}"
+
+- name: Setup inet_protocols to IPV4
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^inet_protocols'
+    line: "inet_protocols = ipv4"
+
+- name: Restart postfix
+  systemd:
+    name: postfix
+    state: restarted
