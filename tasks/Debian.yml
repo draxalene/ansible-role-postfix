@@ -48,5 +48,11 @@
     regexp: '^inet_protocols'
     line: "inet_protocols = ipv4"
 
+- name: Add a line smtputf8_enable to main.cf
+  lineinfile:
+    path: /etc/postfix/main.cf
+    line: "smtputf8_enable = no"
+    create: yes
+
 - name: Restart postfix
   service: name=postfix state=restarted
