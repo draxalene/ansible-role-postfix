@@ -11,13 +11,33 @@
     name: python3-dnspython
     state: latest
 
-- name: Get public IP
-  ipify_facts:
-    timeout: 30
+#- name: Get public IP
+#  ipify_facts:
+#    timeout: 30
 
-- name: This is the target public IP and the reverse DNS
+#- name: This is the target public IP and the reverse DNS
+#  debug:
+#    msg: Reverse DNS for {{ ipify_public_ip }} is {{ lookup('dig', ipify_public_ip, 'qtype=PTR')[:-1] }}
+
+- name: Get public_ipv4
+  command: dig TXT +short o-o.myaddr.l.google.com @ns1.google.com -4
+  register: public_ipv4
+
+- name: This is the target public IP
   debug:
-    msg: Reverse DNS for {{ ipify_public_ip }} is {{ lookup('dig', ipify_public_ip, 'qtype=PTR')[:-1] }}
+     msg: "Public IP v4 is : {{ public_ipv4.stdout | regex_replace('\"', '')}}"
+
+- name: Get PTR v4
+  command: dig +short -x "{{ public_ipv4.stdout | regex_replace('\"', '') }}"
+  register: ptr_ipv4
+
+- name: This is the target reverse DNS
+  debug:
+     msg: "Reverse DNS is {{ ptr_ipv4.stdout | regex_replace('.$', '') }}"
+
+- set_fact:
+    public_ipv4: "{{ public_ipv4.stdout | regex_replace('\"', '') }}"
+    ptr_v4: "{{ ptr_ipv4.stdout | regex_replace('.$', '') }}"
 
 - name: Setup smtpd_banner in postfix
   lineinfile:
@@ -40,7 +60,8 @@
   lineinfile:
     path: /etc/postfix/main.cf
     regexp: '^myhostname'
-    line: "myhostname = {{ lookup('dig', ipify_public_ip | join, 'qtype=PTR')[:-1] }}"
+#    line: "myhostname = {{ lookup('dig', ipify_public_ip | join, 'qtype=PTR')[:-1] }}"
+    line: "myhostname = {{ ptr_v4 }}"
 
 - name: Setup inet_protocols to IPV4
   lineinfile:
