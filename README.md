@@ -1,7 +1,8 @@
 hoplacloud.postfix
 =========
+draxalene.postfix
 
-Hopla.cloud role for ansible to install and configure postfix.
+draxalene role for ansible to install and configure postfix. (by hopla.cloud)
 
 Install and configure a postfix server with reverse dns. The server can send mail from localhost only.
 
@@ -22,7 +23,7 @@ user_email: contact email
 Dependencies
 ------------
 
-Nona.
+None.
 
 Example Playbook
 ----------------
@@ -30,7 +31,7 @@ Example Playbook
     - hosts: localhost
       remote_user: root
       roles:
-         - hoplacloud.postfix
+         - draxalene.postfix
 
 License
 -------
@@ -40,4 +41,4 @@ GPLv3
 Author Information
 ------------------
 
-Joffrey Skandera for [hopla.cloud](https://hopla.cloud)
+Alexandre MOREAU by hopla.cloud
